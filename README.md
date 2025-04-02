@@ -6,6 +6,7 @@ This repository is a **work in progress** statistical analysis of all reported S
 ## Data Visualisations
 Below are some preliminary visualisations generated from the dataset using 2020 - 2025 cases (CAA 2 Apr 2025):
 (In light of my upcoming finals for the semester this section will remain rather superficial for the time being)
+(Do also note that the visualisations below are not 100% accurate as they were done prior to any form of cleaning and encoding)
 
 ### Catchword Analysis
 ![Catchword Analysis](./tables/catchword.png)
