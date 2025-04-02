@@ -42,8 +42,10 @@ To run the analysis, ensure you have the following installed:
 ## Usage
 Run the main script to scrape data and generate statistical reports:
 ```sh
+python elitiscrape.py
 python analysis.py
 ```
+(Note: Will be implementing a neater and more intuitive way to run this in the future!)
 
 ## Contributing
 Contributions are welcome! Feel free to fork the repo and submit a pull request.
