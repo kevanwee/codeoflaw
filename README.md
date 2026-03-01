@@ -1,12 +1,39 @@
 # Code of Law
 
-## Overview
-This repository is a **work in progress** statistical analysis of all reported Singapore High Court (SGHC) and Singapore Court of Appeal (SGCA) judgments.
+Code of Law scrapes reported Singapore Supreme Court judgments from eLitigation and generates basic analytics/visualizations from the exported dataset.
 
-## Data Visualisations
-Below are some preliminary visualisations generated from the dataset using 2020 - 2025 cases (CAA 2 Apr 2025):
-(In light of my upcoming finals for the semester this section will remain rather superficial for the time being)
-(Do also note that the visualisations below are not 100% accurate as they were done prior to any form of cleaning and encoding)
+## What this repository does
+- Scrapes SG Supreme Court reported judgments by year (`elitiscrape.py`)
+- Exports structured case data to CSV
+- Runs analysis and chart generation (`analysis.py`)
+- Saves charts to `tables/`
+
+## Project structure
+- `elitiscrape.py`: scraper CLI
+- `analysis.py`: analysis + plot generation CLI
+- `sample/elitigation_cases_2020_to_2025.csv`: sample dataset for local analysis
+- `tables/`: generated chart outputs
+
+## Requirements
+- Python 3.10+
+- Dependencies from `requirements.txt`
+
+Install dependencies:
+
+```sh
+pip install -r requirements.txt
+```
+
+## Usage
+
+### 1. Analyze existing sample data
+This runs without scraping and regenerates charts in `tables/`.
+
+```sh
+python analysis.py --input sample/elitigation_cases_2020_to_2025.csv --output-dir tables
+```
+
+## Generated visuals
 
 ### Catchword Analysis
 ![Catchword Analysis](./tables/catchword.png)
@@ -17,42 +44,60 @@ Below are some preliminary visualisations generated from the dataset using 2020 
 ### Yearly Breakdown
 ![Yearly Breakdown](./tables/yearbreakdown.png)
 
-## Methodology
-This project utilizes a **web scraper** built with `BeautifulSoup` to extract all reported judgments from **eLitigation**. The scraped data is then processed and analyzed using statistical methods to identify trends, patterns, and other insights related to case law in Singapore. 
+### 2. Scrape fresh data
+Scrape a year range and write a CSV.
 
-## Getting Started
-### Prerequisites
-To run the analysis, ensure you have the following installed:
-- Python 3.x
-- Required libraries (listed in `requirements.txt`)
-
-### Installation
-1. Clone this repository:
-   ```sh
-   git clone https://github.com/kevanwee/codeoflaw.git
-   ```
-2. Navigate to the project directory:
-   ```sh
-   cd codeoflaw
-   ```
-3. Install dependencies:
-   ```sh
-   pip install -r requirements.txt
-   ```
-
-## Usage
-Run the main script to scrape data and generate statistical reports:
 ```sh
-python elitiscrape.py
-python analysis.py
+python elitiscrape.py --start-year 2020 --end-year 2025 --output sample/elitigation_cases_2020_to_2025.csv
 ```
-(Note: Will be implementing a neater and more intuitive way to run this in the future!)
 
-## Contributing
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
+Then analyze that CSV:
+
+```sh
+python analysis.py --input sample/elitigation_cases_2020_to_2025.csv --output-dir tables
+```
+
+## Command options
+
+### Scraper (`elitiscrape.py`)
+- `--start-year`: first year to scrape (default: `2020`)
+- `--end-year`: last year to scrape (default: current year)
+- `--output`: output CSV path (default: `sample/elitigation_cases_<start>_to_<end>.csv`)
+- `--delay`: delay in seconds between list-page requests (default: `0.5`)
+- `--timeout`: HTTP timeout in seconds (default: `20`)
+- `--retries`: retries per request (default: `3`)
+- `--max-pages`: optional page cap per year (for quick checks)
+- `--max-cases`: optional total-case cap (for quick checks)
+
+### Analysis (`analysis.py`)
+- `--input`: input CSV path
+- `--output-dir`: chart output directory (default: `tables`)
+- `--top-authors`: top N authors in chart (default: `10`)
+- `--top-terms`: top N catchword categories in chart (default: `15`)
+
+## Output schema
+The scraper outputs these CSV columns:
+- `CaseIdentifier`
+- `Catchwords`
+- `Year`
+- `URL`
+- `WordCount`
+- `ParagraphCount`
+- `Author`
+- `LegalParties`
+
+## Validation
+Quick validation run (small scrape + analysis):
+
+```sh
+python elitiscrape.py --start-year 2025 --end-year 2025 --max-pages 1 --max-cases 10 --output sample/validation_sample.csv
+python analysis.py --input sample/validation_sample.csv --output-dir tables
+```
+
+## Notes
+- Scraping depends on eLitigation page structure and availability.
+- Some case fields may be missing if source pages omit them.
+- Charts are generated with a non-interactive matplotlib backend so they work in terminal/headless environments.
 
 ## License
-This project is licensed under the MIT License.
-
----
-*Work in progress. More updates coming soon!*
+MIT License (see `LICENSE`).

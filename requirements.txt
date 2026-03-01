@@ -1,7 +1,6 @@
-pandas 
-matplotlib 
-seaborn 
-requests 
-beautifulsoup4 
-ftfy 
+pandas
+matplotlib
+requests
+beautifulsoup4
+ftfy
 tqdm
