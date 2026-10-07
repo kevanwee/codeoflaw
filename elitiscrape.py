@@ -165,7 +165,8 @@ class SingaporeLawScraper:
             df = df.sort_values(["Year", "CaseIdentifier"]).reset_index(drop=True)
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(output_path, index=False)
+        # utf-8-sig: Excel otherwise shows the catchwords' em dashes as "â€”"
+        df.to_csv(output_path, index=False, encoding="utf-8-sig")
 
         print(f"\nSaved {len(df):,} cases to {output_path}")
         if not df.empty:
