@@ -44,7 +44,7 @@ def load_dataset(input_path: Path) -> pd.DataFrame:
     if not input_path.exists():
         raise FileNotFoundError(f"Input CSV not found: {input_path}")
 
-    df = pd.read_csv(input_path)
+    df = pd.read_csv(input_path, encoding="utf-8-sig")  # reads files with or without the BOM
     missing_columns = sorted(REQUIRED_COLUMNS - set(df.columns))
     if missing_columns:
         raise ValueError(
